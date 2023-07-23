@@ -1,10 +1,20 @@
-.calming-gradient {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: -1;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+body {
+  font-family: Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* Add this CSS to your styles.css or your CSS file */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(107, 70, 193, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 20px rgba(107, 70, 193, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(107, 70, 193, 0);
+  }
 }
