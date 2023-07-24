@@ -7,15 +7,18 @@ import Todos from '../models/todosModel.js';
 const getTodos = asyncHandler(async (req, res) => {
   // access the logged in user using req.user. (I set it up in the ensureAuth middleware)
   // console.log(req.user);
+  const { userId } = req.params;
 
   // Find all todos
-  const todos = await Todos.find({});
+  const todos = await Todos.find({ userId });
 
   // Check if todos are found
   if (todos.length > 0) {
     res.json({
       todos,
     });
+  } else if (todos.length === 0) {
+    res.json('Todos list is empty');
   } else {
     res.status(404);
     throw new Error('Todos not found');
@@ -26,11 +29,11 @@ const getTodos = asyncHandler(async (req, res) => {
 // @route   POST /api/todos
 // @access  Public
 const createTodo = asyncHandler(async (req, res) => {
-  const { todo } = req.body;
+  const { userId, todo } = req.body;
 
   // Create a new instance of the Todos model with the provided data
   const newTodo = new Todos({
-    userId: '01',
+    userId: userId,
     todo,
   });
 
@@ -53,7 +56,7 @@ const createTodo = asyncHandler(async (req, res) => {
 // @route   PUT /api/todos/:id
 // @access  Public
 const markComplete = asyncHandler(async (req, res) => {
-  const todoId = req.params.id;
+  const { todoId } = req.body;
 
   // Update the completed property
   const result = await Todos.updateOne(
@@ -76,7 +79,7 @@ const markComplete = asyncHandler(async (req, res) => {
 // @route   PUT /api/todos/:id
 // @access  Public
 const markIncomplete = asyncHandler(async (req, res) => {
-  const todoId = req.params.id;
+  const { todoId } = req.body;
 
   // Update the completed property
   const result = await Todos.updateOne(
@@ -95,10 +98,40 @@ const markIncomplete = asyncHandler(async (req, res) => {
   }
 });
 
+// @desc    update task (By id)
+// @route   PUT /api/todos/:id
+// @access  Public
+const updateTask = asyncHandler(async (req, res) => {
+  // Get the todo id from the req.params.
+  const taskId = req.params.id;
+  // get task name from the request body.
+  const { newTaskTitle } = req.body;
+
+  // update todo by id
+  const result = await Todos.updateOne(
+    { _id: taskId },
+    {
+      $set: {
+        todo: newTaskTitle.trim(),
+      },
+    }
+  );
+
+  // Check if any document was modified
+  if (result.modifiedCount === 1) {
+    res.json({
+      message: 'Todo updated successfully',
+    });
+  } else {
+    res.status(404);
+    throw new Error('Todo not found');
+  }
+});
+
 // @desc    Delete todo (By id)
 // @route   DELETE /api/todos/:id
 // @access  Public
-const deleteTodo = asyncHandler(async (req, res) => {
+const deleteTask = asyncHandler(async (req, res) => {
   // Get the todo id from the req.params
   const todoId = req.params.id;
 
@@ -116,4 +149,11 @@ const deleteTodo = asyncHandler(async (req, res) => {
   }
 });
 
-export { getTodos, createTodo, markComplete, deleteTodo, markIncomplete };
+export {
+  getTodos,
+  createTodo,
+  markComplete,
+  markIncomplete,
+  updateTask,
+  deleteTask,
+};
