@@ -4,16 +4,19 @@ import {
   createTodo,
   markComplete,
   markIncomplete,
-  deleteTodo,
+  updateTask,
+  deleteTask,
 } from '../controllers/todosController.js';
 // import { protect, admin } from '../middleware/authMiddleware.js';
 import { ensureAuth } from '../middleware/ensureAuth.js';
 
 const router = express.Router();
 
-router.route('/').get(ensureAuth, getTodos).post(createTodo);
-router.route('/:id').delete(deleteTodo);
+router.route('/:userId').get(ensureAuth, getTodos);
+router.route('/').post(createTodo);
+router.route('/tasks/:id').delete(deleteTask);
 router.route('/:id/complete').put(markComplete);
 router.route('/:id/incomplete').put(markIncomplete);
+router.route('/update/:id').put(updateTask);
 
 export default router;
