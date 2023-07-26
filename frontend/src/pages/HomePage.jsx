@@ -1,31 +1,26 @@
-import Signup from '../components/Signup';
-import CalmingGradient from '../components/CalmingGradient';
-import { Container, Row, Col } from 'react-bootstrap';
+import SignIn from '../components/SignIn';
 
-function HomePage() {
+const HomePage = () => {
   return (
     <>
-      <CalmingGradient />
-      <Container
-        className='d-flex align-items-center justify-content-center'
-        style={{ minHeight: '100vh' }}
-      >
-        <Row>
-          <Col md={6}>
-            <h1>Welcome to Daily Focus Flow</h1>
-            <p>
-              The <strong>all-all-in-one </strong> productivity web app
-            </p>
-          </Col>
-          <Col md={6}>
-            <div className='w-100' style={{ maxWidth: '400px' }}>
-              <Signup />
-            </div>
-          </Col>
-        </Row>
-      </Container>
+      <main className='flex flex-col justify-center items-center mx-auto mt-14 px-4 bg-slate-100'>
+        {/* text  */}
+        <section className='flex justify-center items-center'>
+          <h1 className='text-4xl md:text-6xl font-bold tracking-tight text-gray-900'>
+            Welcome to
+          </h1>
+          <h1 className='text-4xl md:text-6xl font-bold tracking-tight text-indigo-600 ml-3'>
+            Focus Flow
+          </h1>
+        </section>
+
+        {/* sign-in form  */}
+        <section className='w-full flex justify-center items-center mt-5'>
+          <SignIn />
+        </section>
+      </main>
     </>
   );
-}
+};
 
 export default HomePage;
