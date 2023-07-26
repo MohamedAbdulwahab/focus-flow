@@ -83,18 +83,14 @@ const ShowTodos = ({ todo }) => {
         className='rounded appearance-none border-1 border-indigo-600 checked:bg-indigo-600 checked:focus:bg-indigo-600 checked:hover:bg-indigo-600 focus:bg-white focus:outline-none focus:ring-2 focus:ring-indigo-600 mr-2 transition ease-in duration-200'
       />
       {editTask ? (
-        <EditTaskForm
-          task={todo}
-          setEditTask={setEditTask}
-          editTask={editTask}
-        />
+        <EditTaskForm task={todo} setEditTask={setEditTask} />
       ) : (
         <p className='text-[#3C486B] text-md font-bold tracking-tight cursor-pointer'>
           {todo.todo}
         </p>
       )}
 
-      <div className='ml-auto flex space-x-3'>
+      <div className={`${editTask ? 'hidden' : 'ml-auto flex space-x-3'}`}>
         <FaPenToSquare
           onClick={handleEditTask}
           className='text-indigo-400 hover:text-indigo-700 transition ease-in cursor-pointer'
