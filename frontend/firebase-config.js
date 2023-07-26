@@ -1,4 +1,5 @@
 import { initializeApp } from 'firebase/app';
+import { toast } from 'react-toastify';
 
 /*********************************/
 /*       Firebase Config         */
@@ -10,6 +11,7 @@ import {
   GoogleAuthProvider,
   signInWithPopup,
   signOut,
+  updateProfile,
 } from 'firebase/auth';
 
 /* Web app's Firebase configuration */
@@ -31,11 +33,21 @@ export const auth = getAuth(app);
 /*********************************/
 
 /* register: allow users to register a new account (with email and password) */
-const register = async (email, password) => {
+const register = async (email, password, userName) => {
   try {
-    const user = await createUserWithEmailAndPassword(auth, email, password);
+    const user = await createUserWithEmailAndPassword(
+      auth,
+      email,
+      password,
+      userName
+    );
+    await updateProfile(auth.currentUser, {
+      displayName: userName,
+    });
+    // TODO: change to toast
     console.log(user);
   } catch (err) {
+    // TODO: change to toast
     console.log(err.message);
   }
 };
@@ -44,9 +56,15 @@ const register = async (email, password) => {
 const login = async (email, password) => {
   try {
     const user = await signInWithEmailAndPassword(auth, email, password);
-    console.log(user);
+    return user;
   } catch (err) {
-    console.log(err.message);
+    if (err.code === 'auth/wrong-password') {
+      toast.error('Invalid Email or Password');
+    } else if (err.code === 'auth/user-not-found') {
+      toast.error('User not found');
+    } else {
+      toast.error('An error occurred');
+    }
   }
 };
 
@@ -57,8 +75,9 @@ const provider = new GoogleAuthProvider();
 const signInWithGoogle = async () => {
   try {
     const user = await signInWithPopup(auth, provider);
-    console.log(user);
+    return user;
   } catch (err) {
+    // TODO: change to toast
     console.log(err.message);
   }
 };
