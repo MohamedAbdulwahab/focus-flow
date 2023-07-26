@@ -17,6 +17,11 @@ export default ({ mode }) => {
           changeOrigin: true,
           secure: false,
         },
+        '/api/users': {
+          target: 'http://localhost:5500',
+          changeOrigin: true,
+          secure: false,
+        },
       },
     },
   });
