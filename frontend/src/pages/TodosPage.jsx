@@ -22,7 +22,7 @@ const Todos = () => {
   if (isLoading) {
     return 'loading..';
   } else if (isError) {
-    return `something went wrong: ${error.message}`;
+    return `Session Expired: ${JSON.stringify(error.data)}`;
   }
 
   let renderTodos = null;
