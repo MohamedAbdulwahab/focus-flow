@@ -72,20 +72,7 @@ const Header = () => {
                                 'block px-4 py-2 text-sm text-gray-700'
                               )}
                             >
-                              Your Profile
-                            </Link>
-                          )}
-                        </Menu.Item>
-                        <Menu.Item>
-                          {({ active }) => (
-                            <Link
-                              to='/settings'
-                              className={classNames(
-                                active ? 'bg-gray-100' : '',
-                                'block px-4 py-2 text-sm text-gray-700'
-                              )}
-                            >
-                              Settings
+                              Profile
                             </Link>
                           )}
                         </Menu.Item>

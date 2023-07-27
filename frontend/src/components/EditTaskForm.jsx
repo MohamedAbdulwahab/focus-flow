@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { BiCheck } from 'react-icons/bi';
 import { useUpdateTaskTitleMutation } from '../store/apiSlices/todosApiSlice';
 
-const EditTaskForm = ({ task, setEditTask }) => {
+const EditTaskForm = ({ task, editTask }) => {
   /* state to track the updated task title */
   const [newTaskTitle, setNewTaskTitle] = useState(task.todo);
 
@@ -21,7 +21,7 @@ const EditTaskForm = ({ task, setEditTask }) => {
 
     try {
       await updateTaskTitle({ taskId: task._id, newTaskTitle: newTaskTitle });
-      setEditTask(false);
+      editTask(false);
     } catch (error) {
       console.log(`error: ${error}` || `error: ${updateTaskTitleIsError}`);
     }
