@@ -85,4 +85,37 @@ const registerUser = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, getUserInfo };
+// @desc    update user display name
+// @route   PUT /api/users/:id
+// @access  Private
+const updateDisplayName = asyncHandler(async (req, res) => {
+  // get the user email from the request body
+  const { userId } = req.body;
+
+  // get the updated display name
+  const { newDisplayName } = req.body;
+
+  console.log(userId, newDisplayName);
+
+  // update display name by id
+  const result = await User.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        userName: newDisplayName.trim(),
+      },
+    }
+  );
+
+  // Check if any document was modified
+  if (result.modifiedCount === 1) {
+    res.json({
+      message: 'Display name updated successfully',
+    });
+  } else {
+    res.status(404);
+    throw new Error('Failed to update display name');
+  }
+});
+
+export { registerUser, getUserInfo, updateDisplayName };
