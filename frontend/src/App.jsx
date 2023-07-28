@@ -4,6 +4,7 @@ import Register from './pages/Register';
 import Todos from './pages/TodosPage';
 import Header from './components/Header';
 import Footer from './components/Footer';
+import ProfilePage from './pages/ProfilePage';
 import PrivateRoute from './components/PrivateRoute';
 // import AdminRoute from './components/AdminRoute';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
@@ -20,6 +21,7 @@ function App() {
             {/* public Routes */}
             <Route path='/' element={<HomePage />} />
             <Route path='/register' element={<Register />} />
+            <Route path='/profile' element={<ProfilePage />} />
             <Route path='*' element={<ErrorPage />} />
 
             {/* private/protected routes */}
