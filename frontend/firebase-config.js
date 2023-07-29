@@ -10,8 +10,9 @@ import {
   signInWithEmailAndPassword,
   GoogleAuthProvider,
   signInWithPopup,
-  signOut,
   updateProfile,
+  updateEmail,
+  signOut,
 } from 'firebase/auth';
 
 /* Web app's Firebase configuration */
@@ -82,9 +83,34 @@ const signInWithGoogle = async () => {
   }
 };
 
+const fireBaseUpdateDisplayName = async (newDisplayName) => {
+  try {
+    await updateProfile(auth.currentUser, {
+      displayName: newDisplayName,
+    });
+  } catch (err) {
+    console.log(`Error updating display name: ${err.message}`);
+  }
+};
+
+const fireBaseUpdateEmailAddress = async (newEmail) => {
+  try {
+    await updateEmail(auth.currentUser, newEmail);
+  } catch (err) {
+    console.log(`Error updating email: ${err.message}`);
+  }
+};
+
 /* logout: allow users to logout */
 const logout = async () => {
   await signOut(auth);
 };
 
-export { register, login, signInWithGoogle, logout };
+export {
+  register,
+  login,
+  signInWithGoogle,
+  fireBaseUpdateDisplayName,
+  fireBaseUpdateEmailAddress,
+  logout,
+};
