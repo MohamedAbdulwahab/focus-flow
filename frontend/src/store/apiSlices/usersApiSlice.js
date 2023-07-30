@@ -37,6 +37,17 @@ export const usersApiSlice = apiSlice.injectEndpoints({
       }),
       invalidatesTags: ['User'],
     }),
+    updateEmail: builder.mutation({
+      query: (data) => ({
+        url: `${USERS_URL}/${data.userId}/email`,
+        method: 'PUT',
+        body: {
+          userId: data.userId,
+          newEmail: data.newEmail,
+        },
+      }),
+      invalidatesTags: ['User'],
+    }),
   }),
 });
 
@@ -44,4 +55,5 @@ export const {
   useGetUserInfoMutation,
   useRegisterMutation,
   useUpdateDisplayNameMutation,
+  useUpdateEmailMutation,
 } = usersApiSlice;
