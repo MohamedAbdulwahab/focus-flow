@@ -12,6 +12,7 @@ import {
   signInWithPopup,
   updateProfile,
   updateEmail,
+  updatePassword,
   signOut,
 } from 'firebase/auth';
 
@@ -101,6 +102,14 @@ const fireBaseUpdateEmailAddress = async (newEmail) => {
   }
 };
 
+const fireBaseUpdatePassword = async (newPassword) => {
+  try {
+    await updatePassword(auth.currentUser, newPassword);
+  } catch (err) {
+    console.log(`Error updating password: ${err.message}`);
+  }
+};
+
 /* logout: allow users to logout */
 const logout = async () => {
   await signOut(auth);
@@ -112,5 +121,6 @@ export {
   signInWithGoogle,
   fireBaseUpdateDisplayName,
   fireBaseUpdateEmailAddress,
+  fireBaseUpdatePassword,
   logout,
 };
