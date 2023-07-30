@@ -6,11 +6,10 @@ const HomePage = () => {
       <main className='flex flex-col justify-center items-center mx-auto mt-14 px-4 bg-slate-100'>
         {/* text  */}
         <section className='flex justify-center items-center'>
-          <h1 className='text-4xl md:text-6xl font-bold tracking-tight text-gray-900'>
-            Welcome to
-          </h1>
-          <h1 className='text-4xl md:text-6xl font-bold tracking-tight text-indigo-600 ml-3'>
-            Focus Flow
+          <h1 className='text-3xl md:text-6xl font-bold tracking-tight text-gray-700'>
+            Welcome to{' '}
+            <p className='inline tracking-tight text-indigo-700'>Focus </p>
+            <p className='inline text-indigo-600'>Flow</p>
           </h1>
         </section>
 
