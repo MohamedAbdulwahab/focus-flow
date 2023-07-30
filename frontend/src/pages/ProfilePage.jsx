@@ -2,8 +2,16 @@ import { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import Switcher from '../components/Switcher';
 import { BiCheck } from 'react-icons/bi';
-import { useUpdateDisplayNameMutation } from '../store/apiSlices/usersApiSlice';
-import { updateDisplayName } from '../store/slices/authSlice';
+import { updateDisplayName, updateEmail } from '../store/slices/authSlice';
+import { toast } from 'react-toastify';
+import {
+  fireBaseUpdateDisplayName,
+  fireBaseUpdateEmailAddress,
+} from '../../firebase-config';
+import {
+  useUpdateDisplayNameMutation,
+  useUpdateEmailMutation,
+} from '../store/apiSlices/usersApiSlice';
 
 const ProfilePage = () => {
   const { currentUser } = useSelector((state) => state.auth);
@@ -20,12 +28,13 @@ const ProfilePage = () => {
 
   const [
     updateDisplayNameApi,
-    {
-      isLoading: updateDisplayNameLoading,
-      isError: updateDisplayNameIsError,
-      error: updateDisplayNameError,
-    },
+    { isLoading: updateDisplayNameLoading, error: updateDisplayNameError },
   ] = useUpdateDisplayNameMutation();
+
+  const [
+    updateEmailApi,
+    { isLoading: updateEmailLoading, error: updateEmailError },
+  ] = useUpdateEmailMutation();
 
   const handleFormSubmit = (e) => {
     e.preventDefault();
@@ -37,14 +46,45 @@ const ProfilePage = () => {
     e.preventDefault();
 
     try {
-      await updateDisplayNameApi({
+      // update the display name in the database.
+      const { data } = await updateDisplayNameApi({
         userId: currentUser._id,
         newDisplayName: displayName,
       });
-
+      // update display name in firebase.
+      fireBaseUpdateDisplayName(displayName);
+      // update the display name in the global currentUser state.
       dispatch(updateDisplayName(displayName));
+
+      if (data.message === 'Display name updated successfully') {
+        // display a toast successmessage
+        toast.success('Display name updated successfully');
+      }
     } catch (err) {
-      console.log(JSON.stringify(updateDisplayNameError.data));
+      // display a toast error message.
+      toast.error('An error has occured');
+    }
+  };
+
+  const handleUpdateEmail = async (e) => {
+    e.preventDefault();
+
+    try {
+      // update the email address in the database.
+      const { data } = await updateEmailApi({
+        userId: currentUser._id,
+        newEmail: email,
+      });
+      //update email in firebase
+      fireBaseUpdateEmailAddress(email);
+      // update the email address in the global currentUser state.
+      dispatch(updateEmail(email));
+
+      if (data.message === 'Email address updated successfully') {
+        toast.success('Email address updated successfully');
+      }
+    } catch (err) {
+      toast.error('An error has occured');
     }
   };
 
@@ -117,7 +157,7 @@ const ProfilePage = () => {
               <div className='flex justify-center items-center mt-4 pb-4'>
                 {/* Form and button */}
                 <form
-                  onSubmit={handleFormSubmit}
+                  onSubmit={handleUpdateEmail}
                   className='flex flex-row w-full'
                 >
                   <div className='relative w-full border-2 rounded mx-3'>
