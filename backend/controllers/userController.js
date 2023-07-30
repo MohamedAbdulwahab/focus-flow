@@ -95,8 +95,6 @@ const updateDisplayName = asyncHandler(async (req, res) => {
   // get the updated display name
   const { newDisplayName } = req.body;
 
-  console.log(userId, newDisplayName);
-
   // update display name by id
   const result = await User.updateOne(
     { _id: userId },
@@ -118,4 +116,48 @@ const updateDisplayName = asyncHandler(async (req, res) => {
   }
 });
 
-export { registerUser, getUserInfo, updateDisplayName };
+// @desc    update user email address
+// @route   PUT /api/users/:id/email
+// @access  Private
+const updateEmail = asyncHandler(async (req, res) => {
+  // get the user email from the request body.
+  const { userId } = req.body;
+
+  // get the updated display name.
+  const { newEmail } = req.body;
+
+  // find user by new email.
+  const currentUser = await User.findOne({ email: newEmail });
+
+  console.log(userId, newEmail, currentUser);
+
+  // if a user already exists with the new email, throw an error.
+  if (currentUser) {
+    res.status(404);
+    throw new Error(
+      'Unable to change Email. The provided email is registered to another user.'
+    );
+  }
+
+  // update display name by id
+  const result = await User.updateOne(
+    { _id: userId },
+    {
+      $set: {
+        email: newEmail.trim(),
+      },
+    }
+  );
+
+  // Check if any document was modified
+  if (result.modifiedCount === 1) {
+    res.json({
+      message: 'Email address updated successfully',
+    });
+  } else {
+    res.status(404);
+    throw new Error('Failed to update Email address');
+  }
+});
+
+export { registerUser, getUserInfo, updateDisplayName, updateEmail };
