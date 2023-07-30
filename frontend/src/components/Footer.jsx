@@ -8,11 +8,11 @@ const Footer = () => {
             <div className='text-sm py-1'>
               <a
                 href='https://www.mohamedev.com'
-                className=' text-indigo-500 hover:text-indigo-700'
+                className=' text-indigo-600 hover:text-indigo-700 underline'
               >
                 Mohamed Abdulwahab
               </a>{' '}
-              © 2023
+              © <p className='inline text-indigo-600'>2023</p>
             </div>
           </div>
         </div>
