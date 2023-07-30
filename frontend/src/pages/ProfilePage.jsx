@@ -7,6 +7,7 @@ import { toast } from 'react-toastify';
 import {
   fireBaseUpdateDisplayName,
   fireBaseUpdateEmailAddress,
+  fireBaseUpdatePassword,
 } from '../../firebase-config';
 import {
   useUpdateDisplayNameMutation,
@@ -21,6 +22,7 @@ const ProfilePage = () => {
   const [displayName, setDisplayName] = useState(currentUser.userName);
   const [email, setEmail] = useState(currentUser.email);
   const [password, setPassword] = useState('');
+  const [confirPpassword, setConfirmPassword] = useState('');
 
   const [showDisplayNameEdit, setShowDisplayNameEdit] = useState(false);
   const [showEmailEdit, setShowEmailEdit] = useState(false);
@@ -52,7 +54,7 @@ const ProfilePage = () => {
         newDisplayName: displayName,
       });
       // update display name in firebase.
-      fireBaseUpdateDisplayName(displayName);
+      await fireBaseUpdateDisplayName(displayName);
       // update the display name in the global currentUser state.
       dispatch(updateDisplayName(displayName));
 
@@ -76,7 +78,7 @@ const ProfilePage = () => {
         newEmail: email,
       });
       //update email in firebase
-      fireBaseUpdateEmailAddress(email);
+      await fireBaseUpdateEmailAddress(email);
       // update the email address in the global currentUser state.
       dispatch(updateEmail(email));
 
@@ -84,6 +86,20 @@ const ProfilePage = () => {
         toast.success('Email address updated successfully');
       }
     } catch (err) {
+      toast.error('An error has occured');
+    }
+  };
+
+  const handleUpdatePassword = async (e) => {
+    e.preventDefault();
+
+    try {
+      if (password === confirPpassword) {
+        const result = await fireBaseUpdatePassword(password);
+        console.log(result);
+        toast.success('password changed successfully');
+      }
+    } catch (error) {
       toast.error('An error has occured');
     }
   };
@@ -194,7 +210,7 @@ const ProfilePage = () => {
               <div className='flex justify-center items-center mt-4 pb-4'>
                 {/* Form and button */}
                 <form
-                  onSubmit={handleFormSubmit}
+                  onSubmit={handleUpdatePassword}
                   className='flex flex-col w-full py-2 px-3 space-y-2 New '
                 >
                   <input
@@ -207,10 +223,17 @@ const ProfilePage = () => {
                     type='password'
                     placeholder='Confirm New Password'
                     className='block w-full border-0 rounded py-1.5 pl-4 pr-12 text-gray-900 shadow-sm placeholder:text-gray-400 ring-2 ring-inset ring-indigo-400 transition ease-in focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6'
-                    onChange={(e) => setPassword(e.target.value)}
+                    onChange={(e) => setConfirmPassword(e.target.value)}
                   />
                   <button
-                    className='flex items-center justify-center rounded py-2 px-3 bg-indigo-600 hover:bg-indigo-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none'
+                    disabled={password !== confirPpassword}
+                    className={`flex items-center justify-center rounded py-2 px-3 bg-indigo-600 hover:bg-indigo-700 active:shadow-lg mouse shadow transition ease-in duration-200 focus:outline-none ${
+                      password !== confirPpassword ||
+                      password.length === 0 ||
+                      confirPpassword.length === 0
+                        ? 'cursor-not-allowed'
+                        : 'cursor-pointer'
+                    }`}
                     data-ripple-light='true'
                   >
                     <p className='text-white text-sm font-bold'>Submit</p>
