@@ -9,7 +9,11 @@ import {
 } from '../store/apiSlices/todosApiSlice';
 
 const ShowTodos = ({ todo }) => {
+  /* state to track edit tasks */
   const [editTask, setEditTask] = useState(false);
+
+  /* get the token from local storage */
+  const token = localStorage.getItem('token');
 
   /* mark a single task as completed */
   const [
@@ -46,10 +50,10 @@ const ShowTodos = ({ todo }) => {
     try {
       if (!todo.completed) {
         // If the task is incomplete, mark it as complete
-        await markComplete({ todoId: todo._id });
+        await markComplete({ token, todoId: todo._id });
       } else {
         // If the task is already completed, mark it as incomplete
-        await markIncomplete({ todoId: todo._id });
+        await markIncomplete({ token, todoId: todo._id });
       }
     } catch (error) {
       // Handle the error here
@@ -65,6 +69,17 @@ const ShowTodos = ({ todo }) => {
 
   const handleEditTask = () => {
     setEditTask(!editTask);
+  };
+
+  const handleDeleteTask = async () => {
+    try {
+      await deleteTask({ token, id: todo._id });
+      // success toast message
+      toast.success('Task delete successfully');
+    } catch (err) {
+      // failure toast message
+      toast.error('An error occured');
+    }
   };
 
   return (
@@ -96,7 +111,7 @@ const ShowTodos = ({ todo }) => {
           className='text-indigo-400 hover:text-indigo-700 transition ease-in cursor-pointer'
         />
         <FaRegTrashCan
-          onClick={() => deleteTask(todo._id)}
+          onClick={handleDeleteTask}
           className='text-indigo-400 hover:text-indigo-700 transition ease-in cursor-pointer'
         />
       </div>

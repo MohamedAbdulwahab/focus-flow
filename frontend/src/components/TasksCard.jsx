@@ -2,10 +2,14 @@ import { useState } from 'react';
 import Switcher from './Switcher';
 import { useCreateTodoMutation } from '../store/apiSlices/todosApiSlice';
 import { useSelector } from 'react-redux';
+import { toast } from 'react-toastify';
 
 const TasksCard = ({ renderTodos }) => {
   /* state to add a new task */
   const [newTask, setNewTask] = useState('');
+
+  /* get the token from local storage */
+  const token = localStorage.getItem('token');
 
   /* state to show or hide task list */
   const [showTasksList, setShowTasksList] = useState(true);
@@ -14,22 +18,27 @@ const TasksCard = ({ renderTodos }) => {
   const currentUser = useSelector((state) => state.auth.currentUser);
 
   /* create a single task */
-  const [
-    createTask,
-    {
-      isLoading: createTaskLoading,
-      isError: createTaskIsError,
-      error: createTaskError,
-    },
-  ] = useCreateTodoMutation();
+  const [createTask, { isLoading: createTaskLoading }] =
+    useCreateTodoMutation();
 
-  const handleAddNewTodo = (e) => {
+  const handleAddNewTodo = async (e) => {
     e.preventDefault();
 
-    createTask({ userId: currentUser._id, todo: newTask });
-
-    // clear input value
-    setNewTask('');
+    try {
+      // create a new task in the database.
+      const { data } = await createTask({
+        token,
+        userId: currentUser._id,
+        todo: newTask,
+      });
+      // clear input value
+      setNewTask('');
+      if (data.message === 'Todo created successfully') {
+        toast.success('Task created successfully');
+      }
+    } catch (err) {
+      toast.error('An error occured');
+    }
   };
 
   return (
