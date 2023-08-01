@@ -2,6 +2,7 @@ import { useSelector } from 'react-redux';
 import ShowTodos from '../components/ShowTodos';
 import TasksCard from '../components/TasksCard';
 import TasksTimer from '../components/TasksTimer';
+import Spinner from '../components/Spinner';
 import { useGetTodosQuery } from '../store/apiSlices/todosApiSlice';
 
 const Todos = () => {
@@ -20,7 +21,11 @@ const Todos = () => {
   console.log(data);
 
   if (isLoading) {
-    return 'loading..';
+    return (
+      <div className='flex justify-center items-center h-96'>
+        <Spinner height='h-10' width='w-10' color='text-indigo-700' />
+      </div>
+    );
   } else if (isError) {
     return `Session Expired: ${JSON.stringify(error.data)}`;
   }
