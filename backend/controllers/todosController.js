@@ -2,7 +2,7 @@ import asyncHandler from 'express-async-handler';
 import Todos from '../models/todosModel.js';
 
 // @desc    Fetch all todos
-// @route   GET /api/todos
+// @route   GET /api/:userId
 // @access  Public
 const getTodos = asyncHandler(async (req, res) => {
   // access the logged in user using req.user. (I set it up in the ensureAuth middleware)
@@ -107,6 +107,9 @@ const updateTask = asyncHandler(async (req, res) => {
   // get task name from the request body.
   const { newTaskTitle } = req.body;
 
+  // find task by id
+  const task = await Todos.findOne({ _id: taskId });
+
   // update todo by id
   const result = await Todos.updateOne(
     { _id: taskId },
@@ -118,7 +121,7 @@ const updateTask = asyncHandler(async (req, res) => {
   );
 
   // Check if any document was modified
-  if (result.modifiedCount === 1) {
+  if (result.modifiedCount === 1 || task.todo === newTaskTitle) {
     res.json({
       message: 'Todo updated successfully',
     });
