@@ -1,29 +1,37 @@
 import { useState } from 'react';
 import { BiCheck } from 'react-icons/bi';
 import { useUpdateTaskTitleMutation } from '../store/apiSlices/todosApiSlice';
+import { toast } from 'react-toastify';
 
 const EditTaskForm = ({ task, editTask }) => {
   /* state to track the updated task title */
   const [newTaskTitle, setNewTaskTitle] = useState(task.todo);
 
+  /* get the token from local storage */
+  const token = localStorage.getItem('token');
+
   /* update task title */
-  const [
-    updateTaskTitle,
-    {
-      isLoading: updateTaskTitleIsLoading,
-      isError: updateTaskTitleIsError,
-      error: updateTaskTitleError,
-    },
-  ] = useUpdateTaskTitleMutation();
+  const [updateTaskTitle] = useUpdateTaskTitleMutation();
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
     try {
-      await updateTaskTitle({ taskId: task._id, newTaskTitle: newTaskTitle });
+      // update task in the database
+      const { data } = await updateTaskTitle({
+        token,
+        taskId: task._id,
+        newTaskTitle: newTaskTitle,
+      });
+      // close the form
       editTask(false);
+
+      if (data.message === 'Todo updated successfully') {
+        // toast success message
+        toast.success('task updated successfully');
+      }
     } catch (error) {
-      console.log(`error: ${error}` || `error: ${updateTaskTitleIsError}`);
+      toast.error('An error has occured');
     }
   };
 
