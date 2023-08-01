@@ -16,20 +16,23 @@ export const todosApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: TODOS_URL,
         method: 'POST',
+        headers: {
+          token: `Bearer ${data.token}`,
+        },
         body: {
           userId: data.userId,
           todo: data.todo,
-        },
-        headers: {
-          token: `Bearer ${data.token}`,
         },
       }),
       invalidatesTags: ['Todo'],
     }),
     deleteTask: builder.mutation({
-      query: (id) => ({
-        url: `${TODOS_URL}/tasks/${id}`,
+      query: (data) => ({
+        url: `${TODOS_URL}/tasks/${data.id}`,
         method: 'DELETE',
+        headers: {
+          token: `Bearer ${data.token}`,
+        },
       }),
       invalidatesTags: ['Todo'],
     }),
@@ -37,6 +40,9 @@ export const todosApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${TODOS_URL}/${data.todoId}/complete`,
         method: 'PUT',
+        headers: {
+          token: `Bearer ${data.token}`,
+        },
         body: {
           todoId: data.todoId,
         },
@@ -47,6 +53,9 @@ export const todosApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${TODOS_URL}/${data.todoId}/incomplete`,
         method: 'PUT',
+        headers: {
+          token: `Bearer ${data.token}`,
+        },
         body: {
           todoId: data.todoId,
         },
@@ -57,6 +66,9 @@ export const todosApiSlice = apiSlice.injectEndpoints({
       query: (data) => ({
         url: `${TODOS_URL}/update/${data.taskId}`,
         method: 'PUT',
+        headers: {
+          token: `Bearer ${data.token}`,
+        },
         body: {
           newTaskTitle: data.newTaskTitle,
         },
