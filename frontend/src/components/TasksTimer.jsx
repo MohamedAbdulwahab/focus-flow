@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { BsPlayFill, BsPauseFill, BsArrowRepeat } from 'react-icons/bs';
-import { FiChevronDown, FiChevronUp } from 'react-icons/fi';
 import Switcher from './Switcher';
 import {
   decrementTime,
@@ -10,6 +9,9 @@ import {
   setTimerInterval,
 } from '../store/slices/timerSlice';
 
+// Import the bell sound file
+import bellSound from '../audio/bellSound.mp3';
+
 const Timer = () => {
   const dispatch = useDispatch();
   const remainingTime = useSelector((state) => state.timer.remainingTime);
@@ -17,6 +19,7 @@ const Timer = () => {
   const isCompleted = useSelector((state) => state.timer.isCompleted);
 
   const [showTimer, setShowTimer] = useState(true);
+  const [playBell, setPlayBell] = useState(false); // State to trigger the bell sound
 
   const timerRef = useRef(null);
 
@@ -36,6 +39,28 @@ const Timer = () => {
     // Clean up the interval when the component unmounts or the timer completes
     return () => clearInterval(timerInterval);
   }, [dispatch, isRunning, isCompleted]);
+
+  // Check if the remaining time is 0:00 and trigger the bell sound
+  useEffect(() => {
+    if (remainingTime === 0 && isCompleted) {
+      setPlayBell(true);
+
+      dispatch(setRunningStatus(false));
+
+      dispatch(resetTimer());
+    }
+  }, [remainingTime, isRunning, isCompleted, dispatch]);
+
+  // Play the bell sound when playBell state is true
+  useEffect(() => {
+    if (playBell) {
+      const audio = new Audio(bellSound);
+      audio.play();
+
+      // Reset the playBell state to false after the sound is played
+      setPlayBell(false);
+    }
+  }, [playBell]);
 
   const handlePlayClick = () => {
     dispatch(setRunningStatus(true));
