@@ -4,12 +4,15 @@ import App from './App.jsx';
 import '../src/index.css';
 import '../firebase-config.js';
 import { Provider } from 'react-redux';
+import { HelmetProvider } from 'react-helmet-async';
 import store from './store/store.js';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>
-    <Provider store={store}>
-      <App />
-    </Provider>
+    <HelmetProvider>
+      <Provider store={store}>
+        <App />
+      </Provider>
+    </HelmetProvider>
   </React.StrictMode>
 );
