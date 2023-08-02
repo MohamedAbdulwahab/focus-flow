@@ -3,6 +3,7 @@ import ShowTodos from '../components/ShowTodos';
 import TasksCard from '../components/TasksCard';
 import TasksTimer from '../components/TasksTimer';
 import Spinner from '../components/Spinner';
+import Meta from '../components/Meta';
 import { useGetTodosQuery } from '../store/apiSlices/todosApiSlice';
 
 const Todos = () => {
@@ -46,12 +47,15 @@ const Todos = () => {
   }
 
   return (
-    <main className='flex flex-col items-center justify-center bg-slate-100'>
-      <div className='flex flex-col items-center space-y-6 w-full mx-auto px-4 mb-5'>
-        <TasksTimer />
-        <TasksCard renderTodos={renderTodos} />
-      </div>
-    </main>
+    <>
+      <Meta title='Tasks' description='Tasks page' />
+      <main className='flex flex-col items-center justify-center bg-slate-100'>
+        <div className='flex flex-col items-center space-y-6 w-full mx-auto px-4 mb-5'>
+          <TasksTimer />
+          <TasksCard renderTodos={renderTodos} />
+        </div>
+      </main>
+    </>
   );
 };
 

@@ -1,8 +1,10 @@
 import SignIn from '../components/SignIn';
+import Meta from '../components/Meta';
 
 const HomePage = () => {
   return (
     <>
+      <Meta />
       <main className='flex flex-col justify-center items-center mx-auto mt-14 px-4 bg-slate-100'>
         {/* text  */}
         <section className='flex justify-center items-center'>
