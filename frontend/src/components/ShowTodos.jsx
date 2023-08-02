@@ -75,7 +75,7 @@ const ShowTodos = ({ todo }) => {
     try {
       await deleteTask({ token, id: todo._id });
       // success toast message
-      toast.success('Task delete successfully');
+      toast.success('Task deleted successfully');
     } catch (err) {
       // failure toast message
       toast.error('An error occured');
