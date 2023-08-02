@@ -76,7 +76,7 @@ const Register = () => {
   };
 
   return (
-    <section className='flex justify-center items-center mt-6'>
+    <section className='flex justify-center items-center mt-6 mx-2 md:mx-0'>
       <div className='flex min-h-full flex-1 flex-col justify-center mt-6 px-6 pt-2 pb-3 lg:px-8 max-w-sm rounded overflow-hidden shadow-lg'>
         <div className='sm:mx-auto sm:w-full sm:max-w-sm'>
           <h2 className='mt-5 text-center text-2xl font-bold leading-9 tracking-tight text-gray-900'>
